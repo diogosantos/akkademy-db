@@ -1,5 +1,6 @@
 name := "akkademy-db"
-ThisBuild / version := "0.1"
+ThisBuild / version := "0.0.1-SNAPSHOT"
+ThisBuild / organization := "com.akkademy-db"
 ThisBuild / scalaVersion := "2.11.12"
 
 lazy val global = project
