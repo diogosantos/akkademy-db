@@ -3,7 +3,7 @@ package com.akkademy
 import akka.actor.ActorSystem
 import akka.pattern.ask
 import akka.util.Timeout
-import com.akkademy.messages.{GetRequest, SetRequest}
+import com.akkademy.messages.{DeleteRequest, GetRequest, SetRequest}
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -18,8 +18,12 @@ class SClient(remoteAddress: String) {
     remoteDb ? SetRequest(key, value)
   }
 
-  def get(key: String): Future[Any] = {
-    remoteDb ? GetRequest(key)
+  def get(key: String): Future[Object] = {
+    (remoteDb ? GetRequest(key)).mapTo[Object]
+  }
+
+  def delete(key: String): Future[Boolean] = {
+    (remoteDb ? DeleteRequest(key)).mapTo[Boolean]
   }
 
 }
