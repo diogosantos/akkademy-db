@@ -1,14 +1,51 @@
 name := "akkademy-db"
+ThisBuild / version := "0.1"
+ThisBuild / scalaVersion := "2.11.12"
 
-version := "0.1"
+lazy val global = project
+  .in(file("."))
+  .aggregate(
+    messages,
+    server,
+    client
+  )
 
-scalaVersion := "2.11.12"
+lazy val messages = project
+  .settings(
+    name := "messages"
+  )
 
-val akkaVersion = "2.5.16"
+lazy val server = project
+  .settings(
+    name := "server",
+    libraryDependencies ++= commonDependencies
+  )
+  .dependsOn(
+    messages
+  )
 
-libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-  "com.typesafe.akka" %% "akka-remote" % akkaVersion,
-  "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
-  "org.scalatest" %% "scalatest" % "2.1.6" % "test"
+lazy val client = project
+  .settings(
+    name := "client",
+    libraryDependencies ++= commonDependencies
+  )
+  .dependsOn(
+    messages
+  )
+
+
+lazy val dependencies = new {
+  val akkaV = "2.5.16"
+
+  val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaV
+  val akkaRemote = "com.typesafe.akka" %% "akka-remote" % akkaV
+  val akkaTestKit = "com.typesafe.akka" %% "akka-testkit" % akkaV % "test"
+  val scalaTest = "org.scalatest" %% "scalatest" % "2.1.6" % "test"
+}
+
+lazy val commonDependencies = Seq(
+  dependencies.akkaActor,
+  dependencies.akkaRemote,
+  dependencies.akkaTestKit,
+  dependencies.scalaTest
 )
